@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="mainBj">#F0F0F0</color>
+    <color name="mainBtnBj">#D4237A</color>
+    <color name="mainBtnText">#F0F0F0</color>
+
+    <color name="loginBj">#F0F0F0</color>
+    <color name="loginBtnBj">#D4237A</color>
+    <color name="loginBtnText">#F0F0F0</color>
+
+    <color name="settingBj">#F0F0F0</color>
+    <color name="settingBtnBj">#D4237A</color>
+    <color name="settingBtnText">#F0F0F0</color>
+
+</resources>

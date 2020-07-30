@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">TopNiceInfo</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <!--    主界面-->
+    <!--    主界面java-->
+    <string name="main_judgeEmpty_toast">设置连接信息</string>
+
+    <!--    登录-->
+    <!--    登录java-->
+    <string name="login_info_no">请填写完整</string>
+    <!--    登录ui-->
+    <string name="login_title">登录</string>
+    <string name="login_input_username">账号</string>
+    <string name="login_input_pow">密码</string>
+    <string name="login_btn_login">登录</string>
+
+    <!--    设置-->
+    <!--    设置java-->
+    <string name="setting_judge_ip_no">ip错误</string>
+    <string name="setting_server_ok">设置成功</string>
+    <string name="setting_server_no">请填写完整</string>
+    <string name="setting_judge_login_no">信息保存成功，去登陆</string>
+    <!--    设置ui-->
+    <string name="setting_title">设置连接信息</string>
+    <string name="setting_input_name">设备名称</string>
+    <string name="setting_input_ip">ip</string>
+    <string name="setting_input_port">端口</string>
+    <string name="setting_btn_link">保存并连接</string>
+
+</resources>
