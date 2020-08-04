@@ -1,30 +1,32 @@
 package com.example.topniceinfo;
 
-import androidx.annotation.IdRes;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
+
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.topniceinfo.adapter.GlideImageLoader;
+import com.example.topniceinfo.server.MyService;
 import com.example.topniceinfo.utils.MyApplication;
 import com.example.topniceinfo.utils.Util;
-import com.example.topniceinfo.websocket.WebSocketUtil;
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -32,7 +34,8 @@ import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
 import java.util.ArrayList;
-import java.util.Random;
+
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class ProgramHomeActivity extends AppCompatActivity {
 
@@ -54,6 +57,10 @@ public class ProgramHomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_program_home);
 
+        //进来关闭服务
+        Intent intent = new Intent(this, MyService.class);
+        stopService(intent);
+
         Message message=new Message();
         message.what=1;
         handler.sendMessageDelayed(message,1000);
@@ -64,6 +71,7 @@ public class ProgramHomeActivity extends AppCompatActivity {
     void showView(){
 //        String date=Util.readTextFile("pramData");
 //        if (date==null||date.equals("")){
+        //http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4
             String  date="[{\"id\":\"1\", \"type\":\"bj\", \"resi\":false, \"drag\":false, \"w\":960, \"h\":540, \"color\":\"\", \"barg\":\"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595913207485&di=99086d5c5dc78689004212475b81a84e&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F4%2F56f62bab021a8.jpg\", \"z\":1}, {\"id\":\"2\", \"type\":\"img\", \"x\":200, \"y\":50, \"style\":\"\", \"resi\":true, \"drag\":true, \"src\":\"\", \"w\":100, \"h\":100, \"z\":3}, {\"id\":\"3\", \"type\":\"video\", \"x\":20, \"y\":50, \"resi\":true, \"drag\":true, \"src\":\"https://easyhtml5video.com/assets/video/new/Penguins_of_Madagascar.m4v\", \"w\":300, \"h\":300, \"z\":2},{\"id\":\"5\", \"type\":\"text\", \"x\":200, \"y\":200, \"w\":200, \"resi\":true, \"drag\":true, \"h\":100, \"z\":2, \"color\":\"#FF1493\", \"textAlign\":\"center\", \"size\":\"16px\"}, {\"id\":6, \"type\":\"text\", \"x\":500, \"y\":60, \"w\":150, \"h\":100, \"z\":6, \"resi\":true, \"drag\":true, \"color\":\"#FF1493\", \"textAlign\":\"center\", \"size\":\"16px\"}]";
             Util.saveToSDCard(ProgramHomeActivity.this,"pramData",date);
        // }
@@ -127,15 +135,22 @@ public class ProgramHomeActivity extends AppCompatActivity {
     }
     //视频适配器
     private void initVideo(StandardGSYVideoPlayer videoPlayer,String url) {
-        videoPlayer.setUp(url, true, null);
+        videoPlayer.setUp("http://vfx.mtime.cn/Video/2019/03/19/mp4/190319222227698228.mp4",true,null);
+       // videoPlayer.setUp(url, true, null);
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setImageResource(R.drawable.black_background);
         videoPlayer.setThumbImageView(imageView);
        // videoPlayer.setBottomProgressBarDrawable(null);
-
-        videoPlayer.setIsTouchWiget(false);
+        //关闭日志
+        IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
+        //设置底部进度条
+        videoPlayer.setBottomProgressBarDrawable(null);
+        //设置返回键不可见
+        videoPlayer.getBackButton().setVisibility(View.INVISIBLE);
+        // 设置触摸显示控制ui的消失时间
+        videoPlayer.setDismissControlTime(0);
         GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
         //设置返回键
 //        videoPlayer.getBackButton().setVisibility(View.VISIBLE);

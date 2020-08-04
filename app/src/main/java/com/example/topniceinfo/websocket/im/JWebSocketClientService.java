@@ -24,9 +24,13 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+
 import com.example.topniceinfo.LoginActivity;
+import com.example.topniceinfo.MainActivity;
 import com.example.topniceinfo.ProgramHomeActivity;
 import com.example.topniceinfo.R;
+import com.example.topniceinfo.server.MyService;
 import com.example.topniceinfo.utils.MyApplication;
 import com.example.topniceinfo.utils.Util;
 import com.example.topniceinfo.utils.WebSocketUtil;
@@ -39,6 +43,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import static androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC;
 
 
 public class JWebSocketClientService extends Service {
@@ -165,9 +171,9 @@ public class JWebSocketClientService extends Service {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    Intent intent=new Intent(MyApplication.context, ProgramHomeActivity.class);
-
-                    startActivity(intent);
+                    Util.showToast(MyApplication.context,"监听弹窗");
+                    Intent intent = new Intent(MyApplication.context, MyService.class);
+                    startService(intent);
                     break;
                 case -1:
                     break;
@@ -267,24 +273,24 @@ public class JWebSocketClientService extends Service {
      * @param content
      */
     private void sendNotification(String content) {
-//        Intent intent = new Intent();
-//        intent.setClass(this, MainActivity.class);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        Notification notification = new NotificationCompat.Builder(this)
-//                .setAutoCancel(true)
-//                // 设置该通知优先级
-//                .setPriority(Notification.PRIORITY_MAX)
-//                .setSmallIcon(R.drawable.icon)
-//                .setContentTitle("服务器")
-//                .setContentText(content)
-//                .setVisibility(VISIBILITY_PUBLIC)
-//                .setWhen(System.currentTimeMillis())
-//                // 向通知添加声音、闪灯和振动效果
-//                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_ALL | Notification.DEFAULT_SOUND)
-//                .setContentIntent(pendingIntent)
-//                .build();
-//        notifyManager.notify(1, notification);//id要保证唯一
+        Intent intent = new Intent();
+        intent.setClass(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new NotificationCompat.Builder(this)
+                .setAutoCancel(true)
+                // 设置该通知优先级
+                .setPriority(Notification.PRIORITY_MAX)
+                .setSmallIcon(R.drawable.video_back)
+                .setContentTitle("服务器")
+                .setContentText(content)
+                .setVisibility(VISIBILITY_PUBLIC)
+                .setWhen(System.currentTimeMillis())
+                // 向通知添加声音、闪灯和振动效果
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_ALL | Notification.DEFAULT_SOUND)
+                .setContentIntent(pendingIntent)
+                .build();
+        notifyManager.notify(1, notification);//id要保证唯一
     }
 
 

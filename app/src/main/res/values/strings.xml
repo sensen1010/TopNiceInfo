@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TopNiceInfo</string>
+    <string name="app_name">info</string>
     <string name="title_activity_login">LoginActivity</string>
     <!--    主界面-->
     <!--    主界面java-->

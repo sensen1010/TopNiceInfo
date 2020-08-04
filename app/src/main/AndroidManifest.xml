@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.topniceinfo">
+    package="com.example.topniceinfo"
+    android:installLocation="auto">
 
-
-    <uses-permission xmlns:tools="http://schemas.android.com/tools"
-        android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 解锁屏幕需要的权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 解锁屏幕需要的权限 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" /> <!-- 申请电源锁需要的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 震动权限 -->
-    <uses-permission android:name="android.permission.VIBRATE" /> <!-- android 9.0之后使用前台服务，需要添加权限 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="true"
@@ -24,7 +19,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProgramHomeActivity"></activity>
+        <service
+            android:name=".server.MyService"
+            android:enabled="true"
+            android:exported="true"
+            android:priority="999"
+            ></service>
+
+        <receiver
+            android:name=".broadcastReceiver.MyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".ProgramHomeActivity"
+            android:launchMode="singleTop" />
 
         <service
             android:name=".websocket.im.JWebSocketClientService"

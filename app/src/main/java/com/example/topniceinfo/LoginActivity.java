@@ -69,9 +69,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 WebSocketUtil.getwebSocket().OneClickStart();//开启连接
 
-//                Message message=new Message();
-//                message.what=1;
-//                handler.sendMessageDelayed(message,1000);
+                Message message=new Message();
+                message.what=1;
+                handler.sendMessageDelayed(message,1000);
 
             }
         });
@@ -82,8 +82,8 @@ public class LoginActivity extends AppCompatActivity {
             switch (msg.what) {
                 case 1:
                     Util.showToast(LoginActivity.this,  WebSocketUtil.getwebSocket().isLink()+"");
-                    Intent intent=new Intent(LoginActivity.this,ProgramHomeActivity.class);
-                    startActivity(intent);
+//                    Intent intent=new Intent(LoginActivity.this,ProgramHomeActivity.class);
+//                    startActivity(intent);
                     break;
                 case -1:
                     break;

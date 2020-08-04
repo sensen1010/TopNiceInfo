@@ -3,9 +3,7 @@ package com.example.topniceinfo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -16,10 +14,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.example.topniceinfo.okhttp.OkhttpApi;
 import com.example.topniceinfo.utils.LinkSharedPreUtil;
+import com.example.topniceinfo.utils.MyApplication;
 import com.example.topniceinfo.utils.Util;
-
+import com.example.topniceinfo.websocket.WebSocketUtil;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -56,8 +54,13 @@ public class MainActivity extends AppCompatActivity {
         int height= dm.heightPixels;
         int width= dm.widthPixels;
         int sw=MainActivity.this.getResources().getConfiguration().smallestScreenWidthDp;
-        Util.showToast(MainActivity.this,"屏幕分辨率:" + width + "*" + height+",dpi:"+dm.densityDpi+",sw:"+sw);
-
+       // Util.showToast(MainActivity.this,"屏幕分辨率:" + width + "*" + height+",dpi:"+dm.densityDpi+",sw:"+sw);
+//        try {
+//            Date date = new Date();
+//            Util.showToast(MainActivity.this,"当前时间："+ DateUtil.date2TimeStamp(date,"yyyy-MM-dd HH:mm:ss")+"当前缓存大小："+ DataCleanUtil.getTotalCacheSize(MyApplication.context));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         //初始化组件
         init();
         //判断是否设置了
@@ -66,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkhttpApi.getOkhttpApi().login();
+
+                if (!LinkSharedPreUtil.getSharePre().getIp().equals("")){
+                    WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+                }
+
             }
         }).start();
         main_login_btn.setOnClickListener(new View.OnClickListener() {
