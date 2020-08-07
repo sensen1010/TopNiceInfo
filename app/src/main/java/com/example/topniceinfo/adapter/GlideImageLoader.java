@@ -11,13 +11,13 @@ import com.youth.banner.loader.ImageLoader;
 public class GlideImageLoader extends ImageLoader {
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {
-        imageView.setBackgroundColor(MyApplication.context.getResources().getColor(R.color.colorAccent));
+        //imageView.setBackgroundColor(MyApplication.context.getResources().getColor(R.color.colorAccent));
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        if (path!=null&&!path.equals("")){
-
-        }else {
-            path="http://www.niwoxuexi.com/statics/images/nougat_bg.png";
-        }
+//        if (path!=null&&!path.equals("")){
+//
+//        }else {
+//            path="http://www.niwoxuexi.com/statics/images/nougat_bg.png";
+//        }
         Glide.with(MyApplication.context)
                 .load((String) path)
                 .into(imageView);

@@ -30,14 +30,19 @@ import com.example.topniceinfo.LoginActivity;
 import com.example.topniceinfo.MainActivity;
 import com.example.topniceinfo.ProgramHomeActivity;
 import com.example.topniceinfo.R;
+import com.example.topniceinfo.okhttp.OkhttpApi;
 import com.example.topniceinfo.server.MyService;
+import com.example.topniceinfo.utils.LoginSharedPreUtil;
 import com.example.topniceinfo.utils.MyApplication;
+import com.example.topniceinfo.utils.ProgramSharedPreUtil;
 import com.example.topniceinfo.utils.Util;
 import com.example.topniceinfo.utils.WebSocketUtil;
 import com.example.topniceinfo.websocket.im.JWebSocketClient;
 
 
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.List;
@@ -142,16 +147,26 @@ public class JWebSocketClientService extends Service {
             public void onMessage(String message) {
                 Log.e("JWebSocketClientService", "收到的消息：" + message);
                 //Util.showToast(MyApplication.context,message);
-                if(message.equals("asd")){
-                    Message msg=new Message();
-                    msg.what=1;
-                    msg.obj=message;
-                    handler.sendMessageDelayed(msg,1000);
-                }else if (message.equals("qwe")){
+                try {
+                    JSONObject data=new JSONObject(message);
+                    String type=data.getString("type");
+                    //解析消息  1：新节目
+                    if(type.equals("1")){
+                        //获取节目id、保存
+                        String programId=data.getString("data");
+                        ProgramSharedPreUtil.getSharePre().setProgramId(programId);
+                        ProgramSharedPreUtil.getSharePre().SharedPreEdit();
+                        Message msg=new Message();
+                        msg.what=1;
+                        handler.sendMessage(msg);
+                        checkLockAndShowNotification(message);
+                    }else if (message.equals("qwe")){
 
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                checkLockAndShowNotification(message);
             }
             @Override
             public void onOpen(ServerHandshake handshakedata) {
@@ -161,6 +176,7 @@ public class JWebSocketClientService extends Service {
             @Override
             public void onError(Exception ex) {
                 super.onError(ex);
+               ex.printStackTrace();
                 Log.e("JWebSocketClientService", ex.getMessage());
             }
         };
@@ -171,16 +187,20 @@ public class JWebSocketClientService extends Service {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    Util.showToast(MyApplication.context,"监听弹窗");
+                    String enterId= LoginSharedPreUtil.getSharePre().getEnterId();
+                    String programId= ProgramSharedPreUtil.getSharePre().getProgramId();
+                    OkhttpApi.getOkhttpApi().findByProgram(enterId,programId);
                     Intent intent = new Intent(MyApplication.context, MyService.class);
+                    intent.putExtra("startType","SOCKET_CLIENT");
                     startService(intent);
                     break;
-                case -1:
+                case 2:
+
                     break;
+
             }
         }
     };
-
 
     /**
      * 连接websocket
@@ -261,9 +281,9 @@ public class JWebSocketClientService extends Service {
                 wl.acquire();  //点亮屏幕
                 wl.release();  //任务结束后释放
             }
-            sendNotification(content);
+            //sendNotification(content);
         } else {
-            sendNotification(content);
+            //sendNotification(content);
         }
     }
 
@@ -282,13 +302,11 @@ public class JWebSocketClientService extends Service {
                 // 设置该通知优先级
                 .setPriority(Notification.PRIORITY_MAX)
                 .setSmallIcon(R.drawable.video_back)
-                .setContentTitle("服务器")
-                .setContentText(content)
                 .setVisibility(VISIBILITY_PUBLIC)
                 .setWhen(System.currentTimeMillis())
                 // 向通知添加声音、闪灯和振动效果
                 .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_ALL | Notification.DEFAULT_SOUND)
-                .setContentIntent(pendingIntent)
+                //.setContentIntent(pendingIntent)
                 .build();
         notifyManager.notify(1, notification);//id要保证唯一
     }

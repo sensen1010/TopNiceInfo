@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 public class LinkSharedPreUtil {
     String filename="settingService";
+    final  String pathName="/info";
     String ip;
     String name;
     String port;
@@ -29,7 +30,12 @@ public class LinkSharedPreUtil {
 
     //返回地址
     public String urlServer(){
-        return "http://"+ip+":"+port;
+        return "http://"+ip+":"+port+pathName;
+    }
+
+    //返回图片地址
+    public String imgUrlServer(){
+        return "http://"+ip+":"+"8080"+"/file/";
     }
 
     public LinkSharedPreUtil(){

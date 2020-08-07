@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.topniceinfo.utils.LinkSharedPreUtil;
+import com.example.topniceinfo.utils.LoginSharedPreUtil;
 import com.example.topniceinfo.utils.MyApplication;
 import com.example.topniceinfo.utils.Util;
 import com.example.topniceinfo.websocket.WebSocketUtil;
@@ -50,32 +51,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        DisplayMetrics dm = MainActivity.this.getResources().getDisplayMetrics();
-        int height= dm.heightPixels;
-        int width= dm.widthPixels;
-        int sw=MainActivity.this.getResources().getConfiguration().smallestScreenWidthDp;
-       // Util.showToast(MainActivity.this,"屏幕分辨率:" + width + "*" + height+",dpi:"+dm.densityDpi+",sw:"+sw);
-//        try {
-//            Date date = new Date();
-//            Util.showToast(MainActivity.this,"当前时间："+ DateUtil.date2TimeStamp(date,"yyyy-MM-dd HH:mm:ss")+"当前缓存大小："+ DataCleanUtil.getTotalCacheSize(MyApplication.context));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Util.showToast(this,"当前："+Util.getMac());
+
         //初始化组件
         init();
         //判断是否设置了
         judgeSetting();
-        /* 登录界面跳转 */
+        /* 进入界面，判断是否已登录 */
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 if (!LinkSharedPreUtil.getSharePre().getIp().equals("")){
-                    WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+                    if (!LoginSharedPreUtil.getSharePre().getEnterId().equals("")){
+                         WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+                    }
                 }
-
             }
         }).start();
+
+
         main_login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

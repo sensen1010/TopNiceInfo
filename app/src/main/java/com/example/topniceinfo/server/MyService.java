@@ -76,26 +76,30 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        String startType=intent.getStringExtra("startType");
         startForeground();
-        showDialog();
+        showDialog(startType);
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void showDialog() {
+    private void showDialog(String startType) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        if (ProgramHomeActivity.programHomeActivity!=null){
+                            ProgramHomeActivity.programHomeActivity.finish();
+                        }
                         Intent intent=new Intent(MyApplication.context, ProgramHomeActivity.class);
+                        intent.putExtra("startType",startType);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
                 }).start();
             }
         },0);
-
     }
 
 }

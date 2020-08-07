@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.example.topniceinfo.okhttp.OkhttpApi;
 import com.example.topniceinfo.utils.LoginSharedPreUtil;
 import com.example.topniceinfo.utils.Util;
 import com.example.topniceinfo.websocket.WebSocketUtil;
@@ -66,8 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 LoginSharedPreUtil.getSharePre().setUserName(userName);
                 LoginSharedPreUtil.getSharePre().setPow(password);
                 LoginSharedPreUtil.getSharePre().SharedPreEdit();
-
-                WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+                OkhttpApi.getOkhttpApi().login(userName,password);
 
                 Message message=new Message();
                 message.what=1;
@@ -81,7 +81,13 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    Util.showToast(LoginActivity.this,  WebSocketUtil.getwebSocket().isLink()+"");
+
+                    String enterId=LoginSharedPreUtil.getSharePre().getEnterId();
+                    if (enterId!=null&&!enterId.equals("")){
+                     WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+                     Util.showToast(LoginActivity.this,  WebSocketUtil.getwebSocket().isLink()+"");
+                    }
+
 //                    Intent intent=new Intent(LoginActivity.this,ProgramHomeActivity.class);
 //                    startActivity(intent);
                     break;

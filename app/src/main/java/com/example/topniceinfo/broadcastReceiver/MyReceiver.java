@@ -21,6 +21,7 @@ public class MyReceiver extends BroadcastReceiver {
         // TODO: This method is called when the BroadcastReceiver is receiving
         if(intent.getAction().equals(ACTION_BOOT)){
             Intent server = new Intent(MyApplication.context, MyService.class);
+            server.putExtra("startType","BOOT_COMPLETED");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Util.showToast(context,"安卓8.0开机自启动");
                context.startForegroundService(server);

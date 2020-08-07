@@ -8,6 +8,8 @@ public class LoginSharedPreUtil {
     String userName;
     String pow;
     String enterId;
+    String userId;
+    String token;
     private SharedPreferences settingSpf;
     private static LoginSharedPreUtil sharedPreUtil;
     public  static LoginSharedPreUtil getSharePre(){
@@ -30,13 +32,17 @@ public class LoginSharedPreUtil {
          this.userName=settingSpf.getString("userName","");
          this.pow=settingSpf.getString("pow","");
          this.enterId=settingSpf.getString("enterId","");
+         this.userId=settingSpf.getString("userId","");
+         this.token=settingSpf.getString("token","");
     }
 
      public   void  SharedPreEdit(){
         SharedPreferences.Editor settingEdit=settingSpf.edit();
         settingEdit.putString("userName",userName);
         settingEdit.putString("pow",pow);
-         settingEdit.putString("enterId",enterId);
+        settingEdit.putString("enterId",enterId);
+         settingEdit.putString("userId",userId);
+         settingEdit.putString("token",token);
         settingEdit.commit();
     }
 
@@ -62,5 +68,21 @@ public class LoginSharedPreUtil {
 
     public void setEnterId(String enterId) {
         this.enterId = enterId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
