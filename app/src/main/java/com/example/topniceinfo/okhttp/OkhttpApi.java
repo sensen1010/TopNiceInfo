@@ -52,6 +52,7 @@ public class OkhttpApi {
                 .url(LinkSharedPreUtil.getSharePre().urlServer() +"/users/login")
                 .post(requestBody)
                 .build();
+        System.out.println(LinkSharedPreUtil.getSharePre().urlServer() +"/users/login");
         Call call=okHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
