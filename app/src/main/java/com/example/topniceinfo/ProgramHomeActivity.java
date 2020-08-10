@@ -66,8 +66,10 @@ public class ProgramHomeActivity extends AppCompatActivity {
 
     public static ProgramHomeActivity programHomeActivity = null;
 
-    //布局倍数
+    //布局倍数 横向
     double numW=1;
+    //布局倍数  纵向
+    double numH=1;
     private ArrayList<String> images;
     OrientationUtils orientationUtils;
     //视频播放器
@@ -146,7 +148,9 @@ public class ProgramHomeActivity extends AppCompatActivity {
              if (infoData.getString("type").equals("bj")){
                  //获取总布局的宽度，与本机宽度。计算倍数
                  double w=Double.parseDouble(infoData.getString("w"));
+                 double h=Double.parseDouble(infoData.getString("h"));
                  numW=dm.widthPixels/w;
+                 numH=dm.heightPixels/h;
                  //若背景图为空，则设置背景颜色
                  String bargColor=infoData.getString("bargColor");
                  if(bargColor!=null&&!bargColor.equals("")){
@@ -194,7 +198,13 @@ public class ProgramHomeActivity extends AppCompatActivity {
                     //设置字体大小
                     //字体大小
                     String textSize=infoData.getString("size").replace("px","");
-                    double size=Integer.parseInt(textSize)*numW;
+                    double size;
+                    if (numW>numH){
+                    size=Integer.parseInt(textSize)*numH;
+                    }else {
+                    size=Integer.parseInt(textSize)*numW;
+                    }
+
                     timeView.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float) size);
                     //设置字体颜色
                     String textColor=infoData.getString("textColor");
@@ -246,7 +256,12 @@ public class ProgramHomeActivity extends AppCompatActivity {
                     String bargColor=infoData.getString("bargColor");
                     //字体大小
                     String textSize=infoData.getString("size").replace("px","");
-                    double size=Integer.parseInt(textSize)*numW;
+                    double size;
+                    if (numW>numH){
+                        size=Integer.parseInt(textSize)*numH;
+                    }else {
+                        size=Integer.parseInt(textSize)*numW;
+                    }
                     //滚动
                     if (marquee&&!marqueeType.equals("1")){
                         //滚动方向
@@ -254,7 +269,7 @@ public class ProgramHomeActivity extends AppCompatActivity {
                         //滚动速度
                         String speed=infoData.getString("speed");
                         //容器高度、宽度
-                        int h=(int)Math.round(Integer.parseInt(infoData.getString("h"))*numW);
+                        int h=(int)Math.round(Integer.parseInt(infoData.getString("h"))*numH);
                         int w=(int)Math.round(Integer.parseInt(infoData.getString("w"))*numW);
                         //参数 1.上下文 2.容器宽度 3.容器高度 4.字体大小 5.字体颜色 6.背景颜色 7.滚动方向 8.速度 9.字体内容
                         MyTextView myTextView=new MyTextView(ProgramHomeActivity.this,w,h,size,textColor,bargColor,marqueeDirection,speed,context);
@@ -287,7 +302,11 @@ public class ProgramHomeActivity extends AppCompatActivity {
                     initVideo(videoPlayer,LinkSharedPreUtil.getSharePre().imgUrlServer()+infoData.getString("src"));
                     settingLayoutWH(0,constraintLayout,constraintSet,infoData,videoPlayer.getId());
                 }
-
+            }
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -295,12 +314,12 @@ public class ProgramHomeActivity extends AppCompatActivity {
     void  settingLayoutWH(int type,ConstraintLayout constraintLayout,ConstraintSet constraintSet,JSONObject infoData,int viewId){
         constraintSet.clone(constraintLayout);//拷贝布局
         constraintSet.constrainWidth(viewId,(int)Math.round(Integer.parseInt(infoData.getString("w"))*numW));//组件的宽度
-        constraintSet.constrainHeight(viewId,(int)Math.round(Integer.parseInt(infoData.getString("h"))*numW));//组件的高度
+        constraintSet.constrainHeight(viewId,(int)Math.round(Integer.parseInt(infoData.getString("h"))*numH));//组件的高度
         if (type==0){
             String w=infoData.getString("x");
             String y=infoData.getString("y");
             constraintSet.setTranslationX(viewId,Math.round(Double.parseDouble(infoData.getString("x"))*numW));//设置x偏移量
-            constraintSet.setTranslationY(viewId,Math.round(Double.parseDouble(infoData.getString("y"))*numW));//设置y偏移量
+            constraintSet.setTranslationY(viewId,Math.round(Double.parseDouble(infoData.getString("y"))*numH));//设置y偏移量
         }else if (type==1){
             constraintSet.setTranslationX(viewId,0);//设置x偏移量
             constraintSet.setTranslationY(viewId,0);//设置y偏移量

@@ -150,7 +150,7 @@ public class JWebSocketClientService extends Service {
                 try {
                     JSONObject data=new JSONObject(message);
                     String type=data.getString("type");
-                    //解析消息  -1:链接失败  1：新节目
+                    //解析消息  -1:链接失败  1：新节目（直接展示） 2：定时节目(到设定时间发布)
                     if(type.equals("1")){
                         //获取节目id、保存
                         String programId=data.getString("data");
