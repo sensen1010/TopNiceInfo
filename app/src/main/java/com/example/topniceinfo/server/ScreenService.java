@@ -1,36 +1,27 @@
 package com.example.topniceinfo.server;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.example.topniceinfo.LoginActivity;
 import com.example.topniceinfo.ProgramHomeActivity;
-import com.example.topniceinfo.utils.LoginSharedPreUtil;
 import com.example.topniceinfo.utils.MyApplication;
-import com.example.topniceinfo.utils.Util;
-import com.example.topniceinfo.websocket.WebSocketUtil;
 
-public class MyService extends Service {
+public class ScreenService extends Service {
 
-    public final int NOTIFICATION_ID=1001;
-    public final String CHANNEL_ID="myService01";
-    public final String CHANNEL_NAME="myService";
+    public final int NOTIFICATION_ID=1002;
+    public final String CHANNEL_ID="screenService01";
+    public final String CHANNEL_NAME="screenService";
 
-    public MyService() {
+    public ScreenService() {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@mipmap/ic_main_login"
+                android:background="@drawable/main_btn_login"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp" />
 
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@mipmap/ic_main_setting" />
+                android:background="@drawable/main_btn_setting" />
         </LinearLayout>
 
         <View

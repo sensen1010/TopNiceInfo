@@ -42,7 +42,7 @@ import com.example.topniceinfo.utils.LoginSharedPreUtil;
 import com.example.topniceinfo.utils.MyApplication;
 import com.example.topniceinfo.utils.ProgramSharedPreUtil;
 import com.example.topniceinfo.utils.Util;
-import com.example.topniceinfo.utils.WebSocketUtil;
+import com.example.topniceinfo.websocket.WebSocketUtil;
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -99,7 +99,12 @@ public class ProgramHomeActivity extends AppCompatActivity {
         String startType=intent.getStringExtra("startType");
         //系统开机启动
         if (startType.equals(ACTION_BOOT)){
-
+            Message message=new Message();
+            message.what=1;
+            handler.sendMessageDelayed(message,200);
+            Message message2=new Message();
+            message2.what=3;
+            handler.sendMessageDelayed(message2,200);
         }
         //系统监听启动
         else if (startType.equals(ACTION_SOCKET)){
@@ -107,8 +112,6 @@ public class ProgramHomeActivity extends AppCompatActivity {
             message.what=1;
             handler.sendMessageDelayed(message,200);
         }
-
-
     }
     //该页面只存在一次，新跳转后刷新数据
     @Override
@@ -138,6 +141,7 @@ public class ProgramHomeActivity extends AppCompatActivity {
         constraintLayout.removeAllViews();
         //获取屏幕尺寸对象
         DisplayMetrics dm = MyApplication.context.getResources().getDisplayMetrics();
+        Util.showToast(MyApplication.context,"宽度:"+dm.widthPixels+"高度："+dm.heightPixels);
         //解析布局
         SimpleDateFormat simpleDateFormat;
         simpleDateFormat=new SimpleDateFormat("mmssSSS");
@@ -269,7 +273,7 @@ public class ProgramHomeActivity extends AppCompatActivity {
                         //滚动速度
                         String speed=infoData.getString("speed");
                         //容器高度、宽度
-                        int h=(int)Math.round(Integer.parseInt(infoData.getString("h"))*numH);
+                        int h=(int)Math.round(Integer.parseInt(infoData.getString("h"))*numW);
                         int w=(int)Math.round(Integer.parseInt(infoData.getString("w"))*numW);
                         //参数 1.上下文 2.容器宽度 3.容器高度 4.字体大小 5.字体颜色 6.背景颜色 7.滚动方向 8.速度 9.字体内容
                         MyTextView myTextView=new MyTextView(ProgramHomeActivity.this,w,h,size,textColor,bargColor,marqueeDirection,speed,context);
@@ -314,12 +318,12 @@ public class ProgramHomeActivity extends AppCompatActivity {
     void  settingLayoutWH(int type,ConstraintLayout constraintLayout,ConstraintSet constraintSet,JSONObject infoData,int viewId){
         constraintSet.clone(constraintLayout);//拷贝布局
         constraintSet.constrainWidth(viewId,(int)Math.round(Integer.parseInt(infoData.getString("w"))*numW));//组件的宽度
-        constraintSet.constrainHeight(viewId,(int)Math.round(Integer.parseInt(infoData.getString("h"))*numH));//组件的高度
+        constraintSet.constrainHeight(viewId,(int)Math.round(Integer.parseInt(infoData.getString("h"))*numW));//组件的高度
         if (type==0){
             String w=infoData.getString("x");
             String y=infoData.getString("y");
             constraintSet.setTranslationX(viewId,Math.round(Double.parseDouble(infoData.getString("x"))*numW));//设置x偏移量
-            constraintSet.setTranslationY(viewId,Math.round(Double.parseDouble(infoData.getString("y"))*numH));//设置y偏移量
+            constraintSet.setTranslationY(viewId,Math.round(Double.parseDouble(infoData.getString("y"))*numW));//设置y偏移量
         }else if (type==1){
             constraintSet.setTranslationX(viewId,0);//设置x偏移量
             constraintSet.setTranslationY(viewId,0);//设置y偏移量
@@ -390,8 +394,13 @@ public class ProgramHomeActivity extends AppCompatActivity {
                     break;
                 case 2:
                     TextView textView=findViewById(msg.arg1);
-
                     textView.setText(DateUtil.date2TimeStamp(new Date(),"yyyy-MM-dd HH:mm"));
+                    break;
+                case 3:
+                    String enterId= LoginSharedPreUtil.getSharePre().getEnterId();
+                    if (enterId!=null&&!enterId.equals("")){
+                        WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+                    }
                     break;
             }
         }

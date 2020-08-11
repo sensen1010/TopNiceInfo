@@ -51,7 +51,7 @@
                 android:id="@+id/login_userName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:focusable="true"
                 android:inputType="textPersonName"
                 android:text=""
                 android:hint="@string/login_input_username"
@@ -61,7 +61,7 @@
                 android:id="@+id/login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:focusable="true"
                 android:inputType="textPassword"
                 android:hint="@string/login_input_pow"
                 />

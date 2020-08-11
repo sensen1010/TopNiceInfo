@@ -3,6 +3,8 @@ package com.example.topniceinfo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -14,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.example.topniceinfo.broadcastReceiver.ScreenOffAdminReceiver;
 import com.example.topniceinfo.utils.LinkSharedPreUtil;
 import com.example.topniceinfo.utils.LoginSharedPreUtil;
 import com.example.topniceinfo.utils.MyApplication;
@@ -25,7 +28,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     private Button main_login_btn,main_setting_btn;
-
+    private ComponentName adminReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         //设置语言（根据系统语言设置）
         settingLang();
         setContentView(R.layout.activity_main);
-
+        adminReceiver = new ComponentName(MainActivity.this, ScreenOffAdminReceiver.class);
         if (Build.VERSION.SDK_INT >= 23) {
             int REQUEST_CODE_CONTACT = 101;
             String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -68,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
-
-
         main_login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,6 +92,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        checkAndTurnOnDeviceManager(null);
+    }
+    /**
+     * @param view 检测并去激活设备管理器权限
+     */
+    public void checkAndTurnOnDeviceManager(View view) {
+        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminReceiver);
+        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "开启后就可以使用锁屏功能了...");//显示位置见图二
+        startActivityForResult(intent, 0);
     }
     //初始化
     void init(){
