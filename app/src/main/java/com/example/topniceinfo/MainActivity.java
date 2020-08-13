@@ -3,6 +3,7 @@ package com.example.topniceinfo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
@@ -24,6 +27,13 @@ import com.example.topniceinfo.utils.Util;
 import com.example.topniceinfo.websocket.WebSocketUtil;
 import java.util.Locale;
 import java.util.UUID;
+
+import constacne.UiType;
+import listener.Md5CheckResultListener;
+import listener.UpdateDownloadListener;
+import model.UiConfig;
+import model.UpdateConfig;
+import update.UpdateAppUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
+        Message message=new Message();
+        message.what=1;
+        handler.sendMessageDelayed(message,3000);
 
         Util.showToast(this,"当前："+Util.getMac());
 
@@ -94,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         });
         checkAndTurnOnDeviceManager(null);
     }
+
     /**
      * @param view 检测并去激活设备管理器权限
      */
@@ -135,6 +150,19 @@ public class MainActivity extends AppCompatActivity {
                 changeAppLanguage(Locale.US);
         }
     }
+
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+
+                    break;
+            }
+        }
+    };
+
     //修改语言
     public void changeAppLanguage(Locale locale) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
