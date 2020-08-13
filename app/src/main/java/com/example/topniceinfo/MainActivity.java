@@ -1,11 +1,14 @@
 package com.example.topniceinfo;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -20,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.topniceinfo.broadcastReceiver.ScreenOffAdminReceiver;
+import com.example.topniceinfo.update.pyUtils;
 import com.example.topniceinfo.utils.LinkSharedPreUtil;
 import com.example.topniceinfo.utils.LoginSharedPreUtil;
 import com.example.topniceinfo.utils.MyApplication;
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button main_login_btn,main_setting_btn;
     private ComponentName adminReceiver;
+
+    public Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         //设置语言（根据系统语言设置）
         settingLang();
         setContentView(R.layout.activity_main);
+
+        this.activity=this;
+
         adminReceiver = new ComponentName(MainActivity.this, ScreenOffAdminReceiver.class);
         if (Build.VERSION.SDK_INT >= 23) {
             int REQUEST_CODE_CONTACT = 101;
@@ -152,11 +161,31 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-
+                    showLog();
                     break;
             }
         }
     };
+    void showLog(){
+        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle
+                ("下载").setMessage("要更新吗？")
+                .setNeutralButton("不更新", new DialogInterface
+                        .OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton("更新", new DialogInterface
+                        .OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        pyUtils.downUrl(activity);
+                    }
+                }).show();
+        dialog.setCanceledOnTouchOutside(false);//可选
+        dialog.setCancelable(false);//可选
+    }
+
 
     //修改语言
     public void changeAppLanguage(Locale locale) {
