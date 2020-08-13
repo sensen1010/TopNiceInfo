@@ -28,12 +28,7 @@ import com.example.topniceinfo.websocket.WebSocketUtil;
 import java.util.Locale;
 import java.util.UUID;
 
-import constacne.UiType;
-import listener.Md5CheckResultListener;
-import listener.UpdateDownloadListener;
-import model.UiConfig;
-import model.UpdateConfig;
-import update.UpdateAppUtils;
+
 
 public class MainActivity extends AppCompatActivity {
 
