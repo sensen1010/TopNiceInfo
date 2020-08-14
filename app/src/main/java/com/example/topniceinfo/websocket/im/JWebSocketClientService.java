@@ -160,7 +160,13 @@ public class JWebSocketClientService extends Service {
                         msg.what=1;
                         handler.sendMessage(msg);
                         checkLockAndShowNotification(message);
-                    }else if (message.equals("qwe")){
+                    }
+                    else if(type.equals("-2")){
+                        Message msg=new Message();
+                        msg.what=3;
+                        handler.sendMessage(msg);
+                    }
+                    else if (message.equals("qwe")){
 
                     }
                 } catch (JSONException e) {
@@ -194,8 +200,8 @@ public class JWebSocketClientService extends Service {
                     intent.putExtra("startType","SOCKET_CLIENT");
                     startService(intent);
                     break;
-                case 2:
-
+                case 3:
+                    Util.showToast(MyApplication.context,"已超过主机连接数量");
                     break;
 
             }

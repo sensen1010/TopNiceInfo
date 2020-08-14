@@ -10,11 +10,10 @@ public class MyApplication extends Application {
 
     //@SuppressLint("StaticFieldLeak")
    public static Context context;
-   public static ViewPager viewPager;
+   public static Activity activity;
     @Override
     public void onCreate() {
         super.onCreate();
         context=getApplicationContext();
-
     }
 }

@@ -23,10 +23,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.topniceinfo.broadcastReceiver.ScreenOffAdminReceiver;
+import com.example.topniceinfo.okhttp.OkhttpApi;
+import com.example.topniceinfo.update.apkUpdateUtil;
 import com.example.topniceinfo.update.pyUtils;
 import com.example.topniceinfo.utils.LinkSharedPreUtil;
 import com.example.topniceinfo.utils.LoginSharedPreUtil;
 import com.example.topniceinfo.utils.MyApplication;
+import com.example.topniceinfo.utils.RootUtil;
 import com.example.topniceinfo.utils.Util;
 import com.example.topniceinfo.websocket.WebSocketUtil;
 import java.util.Locale;
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.activity=this;
-
+        MyApplication.activity=this;
         adminReceiver = new ComponentName(MainActivity.this, ScreenOffAdminReceiver.class);
         if (Build.VERSION.SDK_INT >= 23) {
             int REQUEST_CODE_CONTACT = 101;
@@ -68,11 +71,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Message message=new Message();
-        message.what=1;
-        handler.sendMessageDelayed(message,3000);
 
-        Util.showToast(this,"当前："+Util.getMac());
+
 
         //初始化组件
         init();
@@ -84,7 +84,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if (!LinkSharedPreUtil.getSharePre().getIp().equals("")){
                     if (!LoginSharedPreUtil.getSharePre().getEnterId().equals("")){
-                         WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+                        Message message=new Message();
+                        message.what=1;
+                        handler.sendMessageDelayed(message,1000);
                     }
                 }
             }
@@ -129,7 +131,12 @@ public class MainActivity extends AppCompatActivity {
     }
     void judgeSetting(){
         if(LinkSharedPreUtil.getSharePre().getLinkId().equals("")){
-            LinkSharedPreUtil.getSharePre().setLinkId(UUID.randomUUID().toString().replace("-",""));
+            String mac=Util.getMac();
+            if (mac!=null){
+                LinkSharedPreUtil.getSharePre().setLinkId(mac);
+            }else {
+                LinkSharedPreUtil.getSharePre().setLinkId(UUID.randomUUID().toString().replace("-",""));
+            }
             LinkSharedPreUtil.getSharePre().SharedPreEdit();
         }
         if (!LinkSharedPreUtil.getSharePre().judgeEmpty()){
@@ -161,13 +168,15 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    showLog();
+                    OkhttpApi.getOkhttpApi().login(null,null);
+                    OkhttpApi.getOkhttpApi().findByApk();
+                  // showLog();
                     break;
             }
         }
     };
     void showLog(){
-        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle
+        AlertDialog dialog = new AlertDialog.Builder(MyApplication.context).setTitle
                 ("下载").setMessage("要更新吗？")
                 .setNeutralButton("不更新", new DialogInterface
                         .OnClickListener() {
@@ -179,14 +188,12 @@ public class MainActivity extends AppCompatActivity {
                         .OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        pyUtils.downUrl(activity);
+                        pyUtils.downUrl(false);
                     }
                 }).show();
         dialog.setCanceledOnTouchOutside(false);//可选
         dialog.setCancelable(false);//可选
     }
-
-
     //修改语言
     public void changeAppLanguage(Locale locale) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();

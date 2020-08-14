@@ -97,13 +97,22 @@ public class ProgramHomeActivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         String startType=intent.getStringExtra("startType");
-        //系统开机启动
-        if (startType.equals(ACTION_BOOT)){
+        //重装系统进入
+        if(startType==null){
             Message message=new Message();
             message.what=1;
             handler.sendMessageDelayed(message,200);
             Message message2=new Message();
-            message2.what=3;
+            message2.what=4;
+            handler.sendMessageDelayed(message2,200);
+        }
+        //系统开机启动
+        else if (startType.equals(ACTION_BOOT)){
+            Message message=new Message();
+            message.what=1;
+            handler.sendMessageDelayed(message,200);
+            Message message2=new Message();
+            message2.what=4;
             handler.sendMessageDelayed(message2,200);
         }
         //系统监听启动
@@ -120,7 +129,9 @@ public class ProgramHomeActivity extends AppCompatActivity {
         String startType=intent.getStringExtra("startType");
         //系统开机启动
         if (startType.equals(ACTION_BOOT)){
-
+            Message message=new Message();
+            message.what=1;
+            handler.sendMessageDelayed(message,200);
         }
         //系统监听启动
         else if (startType.equals(ACTION_SOCKET)){
@@ -388,7 +399,13 @@ public class ProgramHomeActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             String date=Util.readTextFile("pramData");
-                            showView(date);
+                            if (date!=null){
+                                showView(date);
+                            }else {
+                                Intent intent =new Intent(ProgramHomeActivity.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+
                         }
                     });
                     break;
@@ -399,8 +416,12 @@ public class ProgramHomeActivity extends AppCompatActivity {
                 case 3:
                     String enterId= LoginSharedPreUtil.getSharePre().getEnterId();
                     if (enterId!=null&&!enterId.equals("")){
-                        WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+                        OkhttpApi.getOkhttpApi().login(null,null);
                     }
+                    break;
+                case 4:
+                    //检测系统更新
+                    OkhttpApi.getOkhttpApi().findByApk();
                     break;
             }
         }

@@ -39,7 +39,6 @@ public class WebSocketUtil {
         bindService();//绑定服务
     }
 
-
     //判断是否连接
     public boolean isLink(){
         if (client!=null &&client.isOpen()){

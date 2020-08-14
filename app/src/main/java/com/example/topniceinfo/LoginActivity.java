@@ -68,10 +68,9 @@ public class LoginActivity extends AppCompatActivity {
                 LoginSharedPreUtil.getSharePre().setPow(password);
                 LoginSharedPreUtil.getSharePre().SharedPreEdit();
                 OkhttpApi.getOkhttpApi().login(userName,password);
-
-                Message message=new Message();
-                message.what=1;
-                handler.sendMessageDelayed(message,1000);
+//                Message message=new Message();
+//                message.what=1;
+//                handler.sendMessageDelayed(message,1000);
 
             }
         });
@@ -81,13 +80,11 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-
-                    String enterId=LoginSharedPreUtil.getSharePre().getEnterId();
-                    if (enterId!=null&&!enterId.equals("")){
-                     WebSocketUtil.getwebSocket().OneClickStart();//开启连接
-                     Util.showToast(LoginActivity.this,  WebSocketUtil.getwebSocket().isLink()+"");
-                    }
-
+//                    String enterId=LoginSharedPreUtil.getSharePre().getEnterId();
+//                    if (enterId!=null&&!enterId.equals("")){
+//                     WebSocketUtil.getwebSocket().OneClickStart();//开启连接
+//                    // Util.showToast(LoginActivity.this,  WebSocketUtil.getwebSocket().isLink()+"");
+//                    }
 //                    Intent intent=new Intent(LoginActivity.this,ProgramHomeActivity.class);
 //                    startActivity(intent);
                     break;
