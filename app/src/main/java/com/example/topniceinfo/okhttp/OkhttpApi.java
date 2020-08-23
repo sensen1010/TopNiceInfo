@@ -55,7 +55,7 @@ public class OkhttpApi {
         OkHttpClient okHttpClient=new OkHttpClient.Builder().readTimeout(5, TimeUnit.SECONDS).build();
         RequestBody requestBody=new FormBody.Builder()
                 .add("userName",name)
-                .add("password",pow)
+                .add("pow",pow)
                 .build();
         Request request=new Request.Builder()
                 .url(LinkSharedPreUtil.getSharePre().urlServer() +"/users/login")
@@ -66,6 +66,7 @@ public class OkhttpApi {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
                 Log.d("OkHttpOnFailure", e.getMessage());
             }
             @Override
