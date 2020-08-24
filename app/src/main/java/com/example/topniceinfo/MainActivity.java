@@ -71,9 +71,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
-
-
         //初始化组件
         init();
         //判断是否设置了

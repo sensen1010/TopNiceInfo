@@ -315,6 +315,7 @@ public class ProgramHomeActivity extends AppCompatActivity {
                     videoPlayer.setId(a);
                     constraintLayout.addView(videoPlayer);
                     initVideo(videoPlayer,LinkSharedPreUtil.getSharePre().imgUrlServer()+infoData.getString("src"));
+
                     settingLayoutWH(0,constraintLayout,constraintSet,infoData,videoPlayer.getId());
                 }
             }
@@ -345,6 +346,7 @@ public class ProgramHomeActivity extends AppCompatActivity {
     //视频适配器
     private void initVideo(StandardGSYVideoPlayer videoPlayer,String url) {
         videoPlayer.setUp(url,true,null);
+
        // videoPlayer.setUp(url, true, null);
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -366,9 +368,14 @@ public class ProgramHomeActivity extends AppCompatActivity {
         //设置旋转
         orientationUtils = new OrientationUtils(this, videoPlayer);
         videoPlayer.setIsTouchWiget(true);
+        //重复播放
         videoPlayer.setLooping(true);
+
         videoPlayer.startPlayLogic();
     }
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

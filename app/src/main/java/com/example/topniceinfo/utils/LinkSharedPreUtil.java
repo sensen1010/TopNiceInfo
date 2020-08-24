@@ -33,9 +33,9 @@ public class LinkSharedPreUtil {
         return "http://"+ip+":"+port+pathName;
     }
 
-    //返回图片地址
+    //返回文件地址
     public String imgUrlServer(){
-        return "http://"+ip+":"+"8080"+"/file/";
+        return "http://"+ip+":"+port+"/file/";
     }
 
     public LinkSharedPreUtil(){
@@ -45,7 +45,6 @@ public class LinkSharedPreUtil {
          this.port=settingSpf.getString("port","");
          this.linkId=settingSpf.getString("linkId","");
     }
-
      public  void  SharedPreEdit(){
         SharedPreferences.Editor settingEdit=settingSpf.edit();
         settingEdit.putString("ip",ip);

@@ -82,6 +82,9 @@ public class OkhttpApi {
                             handler.sendMessageDelayed(message,100);
                         }
                         else {
+                            Message message=new Message();
+                            message.what=4;
+                            handler.sendMessageDelayed(message,100);
                             JSONObject data= new JSONObject(jsonObject.getString("data"));
                             LoginSharedPreUtil.getSharePre().setEnterId(data.getString("enterId"));
                             LoginSharedPreUtil.getSharePre().setUserId(data.getString("userId"));
@@ -202,7 +205,7 @@ public class OkhttpApi {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    Util.showToast(MyApplication.context,"登录失败");
+                     Util.showToast(MyApplication.context,"登录失败");
                     LoginSharedPreUtil.getSharePre().setEnterId("");
                     LoginSharedPreUtil.getSharePre().setUserId("");
                     LoginSharedPreUtil.getSharePre().setToken("");
@@ -220,6 +223,9 @@ public class OkhttpApi {
                         Util.showToast(MyApplication.context,"无Root权限");
                         apkUpdateUtil.showDiaLog();
                     }
+                    break;
+                case 4:
+                    Util.showToast(MyApplication.context,"登录成功");
                     break;
                 case -1:
                     break;
